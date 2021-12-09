@@ -1,4 +1,4 @@
-# arm-camera-hand-eye-calibration
+# Arm-camera-Hand-eye-Calibration
 ## Intro
 A standard python code for eye-to-hand calibration.   
 Arm: HITBOT Z-arm 1832   
