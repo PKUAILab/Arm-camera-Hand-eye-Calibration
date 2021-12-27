@@ -14,7 +14,7 @@ def pump_off():         #输出低电平，也就是吸泵停止
 
 
 
-ser = serial.Serial("com5", 9600, timeout=0.5)
+ser = serial.Serial("com6", 9600, timeout=0.5)
 
 
 if __name__ == '__main__':
