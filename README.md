@@ -13,5 +13,5 @@ SCARA standard Nine-point calibration method
 Robotic arm eye-to-hand calibration method (Tsai-Lenz)
 
 # Installation
-1.Download the driver of camera and robotic arm
+1.Download the driver of camera and robotic arm  
 2.Neil the ip configuration of your arm
