@@ -16,33 +16,33 @@ import pyrealsense2 as rs
 
 sys.path.append(os.path.dirname(__file__))
 
-def rand_coords(radius=4600):   
+def rand_coords(radius=4200):   
     randcoords = []                                                         # 存放生成的坐标
     # sqs = []                                                                # 暂存x y 的点值
-    x1 = random.uniform(80, 220)
-    y1 = random.uniform(-160, -40)
+    x1 = random.uniform(90, 230)
+    y1 = random.uniform(-180, -40)
     sq1 = (x1 ** 2) + (y1 ** 2)
     randomrz = int(random.uniform(0, 90))                                   # 随机生成坐标,以及旋转角度，输出[x,y,z], rz
     randcoords.append(((int(x1), int(y1), -92), randomrz))
     while True:
-        x2 = random.uniform(95, 250)
-        y2 = random.uniform(-200, -40)
+        x2 = random.uniform(90, 230) 
+        y2 = random.uniform(-180, -40)
         sq2 = (x2 ** 2) + (y2 ** 2)
         if ((abs(x2 - x1)) ** 2 + (abs(y2 - y1)) ** 2) >= radius:
             randomrz = int(random.uniform(0, 90))
             randcoords.append(((int(x2), int(y2), -92), randomrz))
             break
     while True:
-        x3 = random.uniform(95, 250)
-        y3 = random.uniform(-200, -40)
+        x3 = random.uniform(90, 230)
+        y3 = random.uniform(-180, -40)
         sq3 = (x3 ** 2) + (y3 ** 2)
         if ((abs(x3 - x1)) ** 2 + (abs(y3 - y1)) ** 2) >= radius and ((abs(x3 - x2)) ** 2 + (abs(y3 - y2)) ** 2) >= radius:
             randomrz = int(random.uniform(0, 90))
             randcoords.append(((int(x3), int(y3), -92), randomrz))
             break
     while True:
-        x4 = random.uniform(95, 250)
-        y4 = random.uniform(-200, -40)
+        x4 = random.uniform(95, 230)
+        y4 = random.uniform(-180, -40)
         sq4 = (x4 ** 2) + (y4 ** 2)
         if ((abs(x4 - x1)) ** 2 + (abs(y4 - y1)) ** 2) >= radius and ((abs(x4 - x2)) ** 2 + (abs(y4 - y2)) ** 2) >= radius and ((abs(x4 - x3)) ** 2 + (abs(y4 - y3)) ** 2) >= radius:
             randomrz = int(random.uniform(0, 90))
@@ -58,7 +58,7 @@ def find_coords():                                                           #�
     return x
 
 
-def world2pixel(worldpoint):                                                #待补充
+def world2pixel(worldpoint):                                                # 机械臂坐标系转像素坐标系-盒子外标定
     _, Mn = getM()
     if len(worldpoint) == 2:
         pixel = b2c(Mn, worldpoint)
@@ -67,7 +67,7 @@ def world2pixel(worldpoint):                                                #待
         pixel = b2c(Mn, worldpoint)
     return pixel
 
-def world2pixel_box(worldpoint):                                                #待补充
+def world2pixel_box(worldpoint):                                            # 机械臂坐标系转像素坐标系-盒子内标定
     _, Mn = getM_box()
     if len(worldpoint) == 2:
         pixel = b2c(Mn, worldpoint)
@@ -140,7 +140,9 @@ def auto_collection():
         robot.wait_stop()
         print("ready to place: coord value {}, speed 70\n".format(coord2))
         if a == 1: print("moving") 
-        else: print("error, code is {}".format(a))
+        else: 
+            print("error, code is {}".format(a))
+            raise RuntimeError("arm cannot move to the location {}".format(coord2))
         time.sleep(0.5)
         print("::placing, coord value {}, speed 70\n".format(coord2))
         a = robot.new_movej_xyz_lr(coord2[0], coord2[1], coord2[2]-1 , rz1,100,0,-1)       # 机械臂放置
@@ -221,7 +223,7 @@ if __name__ == "__main__":
         return s.lower() in ["1", "true"]
     parser = argparse.ArgumentParser(description="Descriptor Network Visualizer")
     parser.add_argument("--modelname", default="black-floss", type=str)
-    parser.add_argument("--epochs", type=int, default=160, help="The number of data legions in data collection.")
+    parser.add_argument("--epochs", type=int, default=200, help="The number of data legions in data collection.")
     opt = parser.parse_args()
     
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -229,10 +231,14 @@ if __name__ == "__main__":
     # all_data_collection
 
     
-    a = ([95.15, 58.59, -74.39], 'cylinder')            # 盒子中固定的四个物块位置
-    b = ([94.83, 135.32, -74.39], 'cube')
-    c = ([172.70, 128.435, -74.39], 'triangle')
-    d = ([170.81, 56.61, -74.39], 'prism')
+    # a = ([95.15, 58.59, -74.39], 'cylinder')            # 盒子中固定的四个物块位置
+    # b = ([94.83, 135.32, -74.39], 'cube')
+    # c = ([172.70, 128.435, -74.39], 'triangle')
+    # d = ([170.81, 56.61, -74.39], 'prism')
+    a = ([101.27, 61.8504, -75.39], 'cylinder')            # 盒子中固定的四个物块位置
+    b = ([103.897, 137.3804, -75.39], 'cube')
+    c = ([179.57, 128.0825, -76.39], 'triangle')
+    d = ([179.182, 58.3158, -74.39], 'prism')
     coordlist = (a, b, c, d)
     
     # init position
