@@ -9,7 +9,7 @@ import argparse
 import numpy as np
 
 from cali9 import *
-from serialcontrol import pump_off
+from serialcontrol2 import pump_off
 from HitbotInterface import HitbotInterface
 from form2fit.code.get_align_img import initial_camera,get_curr_image
 import pyrealsense2 as rs        
@@ -145,7 +145,7 @@ def auto_collection():
             raise RuntimeError("arm cannot move to the location {}".format(coord2))
         time.sleep(0.5)
         print("::placing, coord value {}, speed 70\n".format(coord2))
-        a = robot.new_movej_xyz_lr(coord2[0], coord2[1], coord2[2]-1 , rz1,100,0,-1)       # 机械臂放置
+        a = robot.new_movej_xyz_lr(coord2[0], coord2[1], coord2[2]-5 , rz1,100,0,-1)       # 机械臂放置.z轴如果空中放置则-1，多线程放置则-5
         robot.wait_stop()
         if a == 1: print("moving") 
         else: print("error, code is {}".format(a))
@@ -299,7 +299,7 @@ if __name__ == "__main__":
         points_save = np.squeeze(points, axis=1)
                 
         np.savetxt('assets/points/points.txt', points_save)
-        print("Placing complete. Now start to recollect the items.".format(epoch))
+        print("Placing and data colleting complete. Now start to recollect the items.".format(epoch))
         time.sleep(0.5)
         for batch in range(4):
             recollection()      #启动放回流程
