@@ -3,7 +3,9 @@
 A standard python code for eye-to-hand calibration.   
 Arm: HITBOT Z-arm 1832   
 Camera: Intel Realsense D435i  
-Platform: Razer-Blade Advanced Model with Windows10 Enterprise LTSC  
+Platform: Razer-Blade Advanced Model  
+          hardware   i7-8750H with GTX 1070 Max-Q  
+          windows    Windows10 1809 Enterprise LTSC  
           python     3.8.3  
           pytorch    1.8.1  
           cuda       10.2  
